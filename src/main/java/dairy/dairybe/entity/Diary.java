@@ -17,6 +17,9 @@ public class Diary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String year;
+    private int month;
+    private int day;
     private String tone;
     private String mood;
     private String wakeTime;
@@ -33,9 +36,12 @@ public class Diary {
     private String extSentence;
 
     @Builder
-    public Diary(String wakeTime, String tone, String mood,
+    public Diary(String year, int month, int day, String wakeTime, String tone, String mood,
                  List<String> food, List<String> userDo, List<String> meetPeople,
                  String extSentence) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
         this.wakeTime = wakeTime;
         this.tone = tone;
         this.mood = mood;
