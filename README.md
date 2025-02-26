@@ -1,2 +1,1 @@
-# dairy-hackerton-be
-dAIry 백엔드입니다
+dAIry be 리포지토리입니다
