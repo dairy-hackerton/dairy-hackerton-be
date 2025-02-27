@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name="dateDiary")
+@Table(name="date_Diary")
 @Getter
 @NoArgsConstructor
 public class Diary {
@@ -49,10 +49,5 @@ public class Diary {
         this.userDo = userDo;
         this.meetPeople = meetPeople;
         this.extSentence = extSentence;
-    }
-
-    @Override
-    public String toString() {
-        return "waketime " + wakeTime + " tone " + tone + " mood " + mood;
     }
 }
