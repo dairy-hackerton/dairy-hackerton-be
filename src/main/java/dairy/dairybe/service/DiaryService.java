@@ -36,7 +36,7 @@ public class DiaryService {
     private MonthlyPurposeRepository monthlyPurposeRepository;
 
     @Transactional
-    public DateDiaryResponse createDiary(String year, int month, int day, DateDiaryRequestDTO requestDto) {
+    public DateDiaryResponse createDiary(int year, int month, int day, DateDiaryRequestDTO requestDto) {
         System.out.println("40 " + year + " " + month + " " + day);
         Map<String, Object> requestBody = Map.of(
                 "tone", requestDto.getTone(),
@@ -108,7 +108,7 @@ public class DiaryService {
     }
 
     @Transactional(readOnly = true)
-    public MonthlyDiaryResponse getMonthlyDiary(String year, int month) {
+    public MonthlyDiaryResponse getMonthlyDiary(int year, int month) {
         try {
             // 1. 데이터 조회 전 로그 출력
             System.out.println("114 " + year + ", month: " + month);
@@ -150,10 +150,28 @@ public class DiaryService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public DateDiaryResponse getDateDiary(int year, int month, int date) {
+        // 1. Diary 조회
+        Diary diary = dateDiaryRepository.findByYearAndMonthAndDay(year, month, date)
+                .orElseThrow(() -> new RuntimeException("해당 날짜의 일기를 찾을 수 없습니다."));
+
+        // 2. DiaryResult 조회 (언어별 일기 및 요약 포함)
+        DiaryResult diaryResult = diaryResultRepository.findByYearMonthDate(year, month, date)
+                .orElseThrow(() -> new RuntimeException("해당 날짜의 요약을 찾을 수 없습니다."));
+
+        // 3. Diary + DiaryResult 조합하여 응답 반환
+        return new DateDiaryResponse(diary, diaryResult);
+    }
+
+
     @Transactional
-    public void deleteDiary(String year, int month, int day) {
+    public void deleteDiary(int year, int month, int day) {
         // 다이어리 존재 여부 확인
         Optional<Diary> diaryOpt = dateDiaryRepository.findByYearAndMonthAndDay(year, month, day);
+        diaryOpt.ifPresent(diary -> {
+            System.out.println("잘되는지 테스트 " + diary.getYear() + " " + diary.getMonth() + " " + diary.getDay());
+        });
         if (diaryOpt.isEmpty()) {
             throw new EntityNotFoundException("해당 날짜의 다이어리가 존재하지 않습니다.");
         }

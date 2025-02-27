@@ -6,7 +6,7 @@ import java.util.List;
 
 @Getter
 public class MonthlyDiaryResponse {
-    private final String year;
+    private final int year;
     private final int month;
     private final String message;
     private final List<String> monthlyPurpose;
@@ -15,7 +15,7 @@ public class MonthlyDiaryResponse {
     /**
      * 📌 생성자: 월별 목표 및 날짜별 요약된 일기 포함
      */
-    public MonthlyDiaryResponse(String year, int month, String message,
+    public MonthlyDiaryResponse(int year, int month, String message,
                                 List<String> monthlyPurpose, List<DateDiaryResponse> dateDiarySentence) {
         this.year = year;
         this.month = month;

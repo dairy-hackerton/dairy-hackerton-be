@@ -15,15 +15,15 @@ public interface DiaryResultRepository extends JpaRepository<DiaryResult, Long> 
 
     @Query("SELECT d FROM DiaryResult d WHERE d.year = :year AND d.month = :month AND d.date = :date")
     Optional<DiaryResult> findByYearMonthDate(
-            @Param("year") String year,
+            @Param("year") int year,
             @Param("month") int month,
             @Param("date") int date);
 
     @Query("SELECT d FROM DiaryResult d WHERE d.year = :year AND d.month = :month")
     List<DiaryResult> findAllByYearMonth(
-            @Param("year") String year,
+            @Param("year") int year,
             @Param("month") int month
     );
 
-    void deleteByYearAndMonthAndDate(String year, int month, int date);
+    void deleteByYearAndMonthAndDate(int year, int month, int date);
 }

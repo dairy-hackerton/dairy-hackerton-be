@@ -11,10 +11,10 @@ import java.util.Optional;
 @Repository
 public interface DateDiaryRepository extends JpaRepository<Diary, Long> {
 
-    List<Diary> findByYearAndMonth(String year, int month);
+    List<Diary> findByYearAndMonth(int year, int month);
 
-    Optional<Diary> findByYearAndMonthAndDay(String year, int month, int day);
+    Optional<Diary> findByYearAndMonthAndDay(int year, int month, int day);
 
     @Transactional
-    void deleteByYearAndMonthAndDay(String year, int month, int day);
+    void deleteByYearAndMonthAndDay(int year, int month, int day);
 }

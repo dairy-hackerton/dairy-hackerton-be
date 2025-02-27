@@ -18,14 +18,14 @@ public class MonthlyPurpose {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String year;
+    private int year;
     private int month;
 
     @ElementCollection
     private List<String> purposes;
 
     @Builder
-    public MonthlyPurpose(String year, int month, List<String> purposes) {
+    public MonthlyPurpose(int year, int month, List<String> purposes) {
         this.year = year;
         this.month = month;
         this.purposes = purposes;

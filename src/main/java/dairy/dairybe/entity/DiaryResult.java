@@ -15,7 +15,7 @@ public class DiaryResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String year;
+    private int year;
     private int month;
     private int date;
 
@@ -37,7 +37,7 @@ public class DiaryResult {
     private Diary diary;
 
     @Builder
-    public DiaryResult(String year, int month, int date,
+    public DiaryResult(int year, int month, int date,
                        String diaryKo, String diaryEn, String diaryJa,
                        String diaryCh, String diaryLa, String summary, Diary diary) {
         this.year = year;

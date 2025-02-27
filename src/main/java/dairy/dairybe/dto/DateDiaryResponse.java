@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 public class DateDiaryResponse {
-    private final String year;
+    private final int year;
     private final int month;
     private final int day;
     private final String tone;
@@ -44,7 +44,7 @@ public class DateDiaryResponse {
         this.summary = diaryResult.getSummary();
     }
 
-    public DateDiaryResponse(String year, int month, int day, String summary, String diaryKo, String diaryEn,
+    public DateDiaryResponse(int year, int month, int day, String summary, String diaryKo, String diaryEn,
                              String diaryJa, String diaryCh, String diaryLa) {
         this.year = year;
         this.month = month;

@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface MonthlyPurposeRepository extends JpaRepository<MonthlyPurpose, Long> {
-    Optional<MonthlyPurpose> findByyearAndMonth(String year, int month);
+    Optional<MonthlyPurpose> findByyearAndMonth(int year, int month);
 }
