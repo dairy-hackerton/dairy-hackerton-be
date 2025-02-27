@@ -30,7 +30,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "my-backend.tar"
-          target: "/home/ubuntu/"
+          target: "/home/ubuntu/jacky/test/backend-test/"
 
       - name: SSH into EC2 and Deploy
         uses: appleboy/ssh-action@master
@@ -39,6 +39,6 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker load -i /home/ubuntu/my-backend.tar
-            docker-compose -f /home/ubuntu/docker-compose.yml down
-            docker-compose -f /home/ubuntu/docker-compose.yml up -d
+            docker load -i /home/ubuntu/jacky/test/backend-test/my-backend.tar
+            docker-compose -f /home/ubuntu/jacky/test/backend-test/docker-compose.yml down
+            docker-compose -f /home/ubuntu/jacky/test/backend-test/docker-compose.yml up -d
