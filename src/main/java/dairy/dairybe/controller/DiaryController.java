@@ -18,31 +18,31 @@ public class DiaryController {
     @Autowired
     private DiaryService diaryService;
 
-    @GetMapping("/{year}-{month}")
-    public ResponseEntity<?> getMonthlyDiary(@PathVariable String year,
-                                             @PathVariable int month) {
-        try {
-            System.out.println("25 " + year + "-" + month);
-            MonthlyDiaryResponse response = diaryService.getMonthlyDiary(year, month);
-            System.out.println("27 " + year + "-" + month);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            System.out.println("30 " + year + "-" + month);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("message", "internal_server_error", "data", null));
-        }
+    @GetMapping("/{year}/{month}")
+    public ResponseEntity<MonthlyDiaryResponse> getMonthlyDiary(
+            @PathVariable int year, @PathVariable int month) {
+        MonthlyDiaryResponse response = diaryService.getMonthlyDiary(year, month);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{year}-{month}-{date}")
     public ResponseEntity<DateDiaryResponse> createDiary(
-            @PathVariable String year, @PathVariable int month, @PathVariable int date,
+            @PathVariable int year, @PathVariable int month, @PathVariable int date,
             @RequestBody DateDiaryRequestDTO requestDto) {
         DateDiaryResponse response = diaryService.createDiary(year, month, date, requestDto);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{year}-{month}-{date}")
-    public ResponseEntity<String> deleteDiary(@PathVariable String year, @PathVariable int month, @PathVariable int date) {
+    @GetMapping("/{year}/{month}/{date}")
+    public ResponseEntity<DateDiaryResponse> getDateDiary(
+            @PathVariable int year, @PathVariable int month, @PathVariable int date) {
+        DateDiaryResponse response = diaryService.getDateDiary(year, month, date);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @DeleteMapping("/{year}/{month}/{date}")
+    public ResponseEntity<String> deleteDiary(@PathVariable int year, @PathVariable int month, @PathVariable int date) {
         diaryService.deleteDiary(year, month, date);
         return ResponseEntity.ok("delete_success");
     }
