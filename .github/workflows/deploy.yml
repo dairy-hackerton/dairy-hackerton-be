@@ -26,6 +26,12 @@ jobs:
         run: |
           ls -l my-backend.tar  # ✅ tar 파일이 있는지 확인
 
+      - name: Fix File Permissions
+        run: |
+          chmod 644 my-backend.tar  # ✅ 모든 사용자 읽기 가능하게 변경
+          ls -l my-backend.tar  # ✅ 변경된 권한 확인
+              
+
       # 3) EC2에 Docker 이미지 전송 & 배포
       - name: Copy Docker Image to EC2
         uses: appleboy/scp-action@master
