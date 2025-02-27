@@ -2,7 +2,7 @@ name: Deploy Backend to EC2 with Docker
 
 on:
   push:
-    branches: [ "jacky" ]  # jacky 브랜치에 push될 때 실행
+    branches: [ "main" ]  # main 브랜치에 push될 때 실행
 
 jobs:
   build-and-deploy:
@@ -40,7 +40,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "my-backend.tar"
-          target: "/home/ubuntu/jacky/test/backend-test/"
+          target: "/home/ubuntu/dairy/backend/"
 
       - name: SSH into EC2 and Deploy
         uses: appleboy/ssh-action@master
@@ -49,6 +49,6 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker load -i /home/ubuntu/jacky/test/backend-test/my-backend.tar
-            docker-compose -f /home/ubuntu/jacky/test/backend-test/docker-compose.yml down
-            docker-compose -f /home/ubuntu/jacky/test/backend-test/docker-compose.yml up -d
+            docker load -i /home/ubuntu/dairy/backend/my-backend.tar
+            docker-compose -f /home/ubuntu/dairy/backend/docker-compose.yml down
+            docker-compose -f /home/ubuntu/dairy/backend/docker-compose.yml up -d
