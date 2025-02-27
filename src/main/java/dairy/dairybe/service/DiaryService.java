@@ -37,7 +37,7 @@ public class DiaryService {
 
     @Transactional
     public DateDiaryResponse createDiary(String year, int month, int day, DateDiaryRequestDTO requestDto) {
-
+        System.out.println("40 " + year + " " + month + " " + day);
         Map<String, Object> requestBody = Map.of(
                 "tone", requestDto.getTone(),
                 "mood", requestDto.getMood(),
@@ -47,14 +47,20 @@ public class DiaryService {
                 "meetPeople", requestDto.getMeetPeople(),
                 "extSentence", requestDto.getExtSentence()
         );
+        System.out.println("50 " + year + " " + month + " " + day);
 
-        String fastApiUrl = "https://orange-chainsaw-q7qgpx95p9gxc6wr9-8000.app.github.dev/generate_diary"; // 수정예정
+        String fastApiUrl = "http://13.124.98.245:8000/generate_diary";
         ResponseEntity<Map> response = restTemplate.postForEntity(fastApiUrl, requestBody, Map.class);
+        System.out.println("54 " + year + " " + month + " " + day);
 
         Map responseData = response.getBody();
+        System.out.println("57 " + year + " " + month + " " + day);
         if (responseData == null) {
+            System.out.println("59 " + year + " " + month + " " + day);
             throw new RuntimeException("FastAPI 오류");
         }
+
+        System.out.println("62 " + year + " " + month + " " + day);
 
         String diaryKo = (String) responseData.get("diary_kor");
         String diaryEn = (String) responseData.get("diary_eng");
@@ -62,6 +68,8 @@ public class DiaryService {
         String diaryCh = (String) responseData.get("diary_China");
         String diaryLa = (String) responseData.get("diary_latin");
         String summary = (String) responseData.get("summary");
+
+        System.out.println("72 " + year + " " + month + " " + day);
 
         Diary diary = Diary.builder()
                 .year(year)
@@ -75,8 +83,11 @@ public class DiaryService {
                 .meetPeople(requestDto.getMeetPeople())
                 .extSentence(requestDto.getExtSentence())
                 .build();
+        System.out.println("86 " + year + " " + month + " " + day);
         dateDiaryRepository.save(diary);
+        System.out.println("88 " + year + " " + month + " " + day);
 
+        System.out.println("90" + diary.getYear() + " " + diary.getMonth() + " " + diary.getDay());
         DiaryResult diaryResult = DiaryResult.builder()
                 .year(year)
                 .month(month)
@@ -87,30 +98,56 @@ public class DiaryService {
                 .diaryCh(diaryCh)
                 .diaryLa(diaryLa)
                 .summary(summary)
+                .diary(diary)
                 .build();
+        System.out.println("103줄" + diaryResult.getDiaryKo());
         diaryResultRepository.save(diaryResult);
+        System.out.println("105줄" + diaryResult.getDiaryKo());
 
         return new DateDiaryResponse(diary, diaryResult);
     }
 
     @Transactional(readOnly = true)
     public MonthlyDiaryResponse getMonthlyDiary(String year, int month) {
+        try {
+            // 1. 데이터 조회 전 로그 출력
+            System.out.println("114 " + year + ", month: " + month);
+            Optional<MonthlyPurpose> optionalPurpose = monthlyPurposeRepository.findByyearAndMonth(year, month);
 
-        List<String> monthlyPurposes = monthlyPurposeRepository.findByyearAndMonth(year, month)
-                .map(MonthlyPurpose::getPurposes)
-                .orElse(Collections.emptyList());
+            // 2. 데이터가 있는지 로그 출력
+            if (optionalPurpose.isPresent()) {
+                System.out.println("Monthly purposes found: " + optionalPurpose.get().getPurposes());
+            } else {
+                System.out.println("No monthly purposes found.");
+            }
 
-        List<DiaryResult> diaryResults = diaryResultRepository.findAllByYearMonth(year, month);
+            List<String> monthlyPurposes = optionalPurpose.map(MonthlyPurpose::getPurposes)
+                    .orElse(Collections.emptyList());
 
-        List<DateDiaryResponse> dateDiaryResponses = diaryResults.stream()
-                .map(diary -> new DateDiaryResponse(
-                        diary.getYear(), diary.getMonth(), diary.getDate(),
-                        diary.getSummary(), diary.getDiaryKo(), diary.getDiaryEn(),
-                        diary.getDiaryJa(), diary.getDiaryCh(), diary.getDiaryLa()
-                ))
-                .collect(Collectors.toList());
+            // 3. diaryResults 조회 전 로그
+            System.out.println("Fetching diary results for year: " + year + ", month: " + month);
+            List<DiaryResult> diaryResults = Optional.ofNullable(diaryResultRepository.findAllByYearMonth(year, month))
+                    .orElse(Collections.emptyList());
+            System.out.println("131 " + diaryResults);
+            for (DiaryResult diaryResult : diaryResults) {
+                System.out.println(diaryResult.getDiary());
+            }
 
-        return new MonthlyDiaryResponse(year, month, "monthly_diary_success", monthlyPurposes, dateDiaryResponses);
+            System.out.println("Diary results found: " + diaryResults.size());
+            List<DateDiaryResponse> dateDiaryResponses = diaryResults.stream()
+                    .map(diaryResult -> {
+                        Diary diary = diaryResult.getDiary();
+                        System.out.println("139 " + diary);
+                        return new DateDiaryResponse(diary, diaryResult);
+                    })
+                    .collect(Collectors.toList());
+
+            return new MonthlyDiaryResponse(year, month, "monthly_diary_success", monthlyPurposes, dateDiaryResponses);
+        } catch (Exception e) {
+            System.err.println("Error in getMonthlyDiary: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Transactional

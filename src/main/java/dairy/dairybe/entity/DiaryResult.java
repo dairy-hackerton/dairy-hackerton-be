@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="diary_summary")
+@Table(name="diary_result")
 @Getter
 @NoArgsConstructor
 public class DiaryResult {
@@ -32,10 +32,14 @@ public class DiaryResult {
 
     private String summary;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // diary도 자동 저장
+    @JoinColumn(name = "diary_id", referencedColumnName = "id", nullable = true) // FK 설정
+    private Diary diary;
+
     @Builder
     public DiaryResult(String year, int month, int date,
                        String diaryKo, String diaryEn, String diaryJa,
-                       String diaryCh, String diaryLa, String summary) {
+                       String diaryCh, String diaryLa, String summary, Diary diary) {
         this.year = year;
         this.month = month;
         this.date = date;
@@ -45,6 +49,6 @@ public class DiaryResult {
         this.diaryCh = diaryCh;
         this.diaryLa = diaryLa;
         this.summary = summary;
+        this.diary = diary;
     }
-
 }

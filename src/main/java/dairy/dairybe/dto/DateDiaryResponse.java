@@ -25,9 +25,6 @@ public class DateDiaryResponse {
     private final String diaryLa;
     private final String summary;
 
-    /**
-     * 📌 Diary 엔티티로부터 변환 (입력 데이터만 포함)
-     */
     public DateDiaryResponse(Diary diary, DiaryResult diaryResult) {
         this.year = diary.getYear();
         this.month = diary.getMonth();
@@ -47,15 +44,12 @@ public class DateDiaryResponse {
         this.summary = diaryResult.getSummary();
     }
 
-    /**
-     * 📌 DiaryResult 엔티티로부터 변환 (FastAPI 응답 포함)
-     */
     public DateDiaryResponse(String year, int month, int day, String summary, String diaryKo, String diaryEn,
                              String diaryJa, String diaryCh, String diaryLa) {
         this.year = year;
         this.month = month;
         this.day = day;
-        this.tone = null;  // FastAPI 응답에는 없음
+        this.tone = null;
         this.mood = null;
         this.wakeTime = null;
         this.food = null;

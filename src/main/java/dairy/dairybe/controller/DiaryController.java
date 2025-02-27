@@ -22,9 +22,12 @@ public class DiaryController {
     public ResponseEntity<?> getMonthlyDiary(@PathVariable String year,
                                              @PathVariable int month) {
         try {
+            System.out.println("25 " + year + "-" + month);
             MonthlyDiaryResponse response = diaryService.getMonthlyDiary(year, month);
+            System.out.println("27 " + year + "-" + month);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            System.out.println("30 " + year + "-" + month);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("message", "internal_server_error", "data", null));
         }
