@@ -46,4 +46,10 @@ public class DiaryController {
         diaryService.deleteDiary(year, month, date);
         return ResponseEntity.ok("delete_success");
     }
+
+    // https 테스트용 메서드
+    @GetMapping("/test")
+    public String test() {
+        return "test";
+    }
 }
